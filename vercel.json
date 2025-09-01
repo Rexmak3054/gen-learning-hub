@@ -20,8 +20,14 @@
     },
     {
       "src": "/(.*)",
-      "dest": "frontend/$1"
+      "dest": "frontend/$1",
+      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*"
+      }
     }
+  
+
   ],
   "installCommand": "cd frontend && npm install",
   "buildCommand": "cd frontend && npm run build",
