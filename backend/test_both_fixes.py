@@ -10,7 +10,7 @@ import json
 async def test_both_fixes():
     """Test that both issues are fixed"""
     
-    base_url = "http://localhost:8001"
+    base_url = "https://3.26.39.202/"
     
     print("🧪 Testing Both Fixes: Course Cards + Clean Responses")
     print("=" * 60)
