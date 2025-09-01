@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: DynamoDB table for course_info (uuid PK) with GSIs on subject and partner.
+
+Parameters:
+  TableName:
+    Type: String
+    Default: Courses
+    Description: Name of the DynamoDB table.
+
+Resources:
+  CoursesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Ref TableName
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: uuid
+          AttributeType: S
+        - AttributeName: subject
+          AttributeType: S
+        - AttributeName: partner
+          AttributeType: S
+      KeySchema:
+        - AttributeName: uuid
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: SubjectIndex
+          KeySchema:
+            - AttributeName: subject
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+        - IndexName: PartnerIndex
+          KeySchema:
+            - AttributeName: partner
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+      SSESpecification:
+        SSEEnabled: true
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      Tags:
+        - Key: App
+          Value: course-info
+        - Key: ManagedBy
+          Value: cloudformation
+
+Outputs:
+  TableName:
+    Description: DynamoDB table name
+    Value: !Ref CoursesTable
+  TableArn:
+    Description: DynamoDB table ARN
+    Value: !GetAtt CoursesTable.Arn
+  SubjectIndexName:
+    Description: GSI for querying by subject
+    Value: SubjectIndex
+  PartnerIndexName:
+    Description: GSI for querying by partner
+    Value: PartnerIndex

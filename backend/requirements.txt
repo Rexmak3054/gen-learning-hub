@@ -1,0 +1,21 @@
+# Core FastAPI dependencies
+fastapi==0.104.1
+uvicorn==0.24.0
+python-dotenv==1.0.0
+
+# Your existing dependencies - simplified for Vercel
+requests==2.31.0
+beautifulsoup4==4.12.2
+
+# If you need these specific versions, uncomment:
+# mcp
+# langgraph
+# langchain
+# langchain-core
+# langchain-openai
+# langchain-mcp-adapters
+# boto3
+# opensearch-py
+
+# Pydantic (Vercel compatible version)
+pydantic==2.5.0
