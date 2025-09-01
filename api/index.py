@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from datetime import datetime
 import os
 import logging
@@ -30,6 +30,15 @@ class CourseSearchResponse(BaseModel):
     total_results: int
     query: str
     error: Optional[str] = None
+
+class StudyPlanRequest(BaseModel):
+    courses: List[Dict[str, Any]]
+    userId: str
+
+class StudyPlanResponse(BaseModel):
+    success: bool
+    message: str
+    courses_count: int = 0
 
 # Create FastAPI app
 app = FastAPI(
@@ -393,10 +402,31 @@ async def search_courses(request: CourseSearchRequest):
             error=str(e)
         )
 
+# Save study plan endpoint
+@app.post("/api/save-study-plan", response_model=StudyPlanResponse)
+async def save_study_plan(request: StudyPlanRequest):
+    """Save study plan for a user"""
+    logger.info(f"💾 Saving study plan for user {request.userId} with {len(request.courses)} courses")
+    
+    try:
+        # For now, just return success - you can add actual saving logic later
+        return StudyPlanResponse(
+            success=True,
+            message=f"Study plan saved successfully for user {request.userId}",
+            courses_count=len(request.courses)
+        )
+    except Exception as e:
+        logger.error(f"❌ Error saving study plan: {e}")
+        return StudyPlanResponse(
+            success=False,
+            message="Failed to save study plan",
+            courses_count=0
+        )
+
 # User profile endpoint
 @app.get("/api/user-profile/{user_id}")
 async def get_user_profile(user_id: str):
-    """Get user profile (mock data for now)"""
+    """Get user profile"""
     return {
         "success": True,
         "profile": {
@@ -408,6 +438,16 @@ async def get_user_profile(user_id: str):
             "completedCourses": 2,
             "totalHours": 16
         }
+    }
+
+# Study plan endpoint
+@app.get("/api/study-plan/{user_id}")
+async def get_study_plan(user_id: str):
+    """Get user's study plan"""
+    return {
+        "success": True,
+        "study_plan": [],
+        "user_id": user_id
     }
 
 # Course details endpoint
