@@ -1,5 +1,5 @@
 // API service for Vercel-deployed backend
-const API_BASE_URL = process.env.REACT_APP_API_URL || '';
+const API_BASE_URL = "https://3.26.39.202:8000";
 
 class CourseService {
   static async searchCourses(query, k = 10) {
